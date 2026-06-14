@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-linux:
+    name: Build & Run (Linux, g++)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile
+        run: g++ line.cpp -o line -O2 -Wall -Wextra
+
+      - name: Run
+        run: ./line
+
+      - name: Verify output
+        run: test -f line.ppm && echo "line.ppm generated successfully"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: line-linux.ppm
+          path: line.ppm
+
+  build-windows:
+    name: Build & Run (Windows, MSVC)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Compile
+        run: cl /EHsc /O2 /W3 line.cpp
+
+      - name: Run
+        run: .\line.exe
+
+      - name: Verify output
+        run: Test-Path line.ppm
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: line-windows.ppm
+          path: line.ppm
+
+  build-macos:
+    name: Build & Run (macOS, clang++)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile
+        run: clang++ line.cpp -o line -O2 -Wall -Wextra
+
+      - name: Run
+        run: ./line
+
+      - name: Verify output
+        run: test -f line.ppm && echo "line.ppm generated successfully"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: line-macos.ppm
+          path: line.ppm
