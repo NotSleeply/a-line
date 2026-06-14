@@ -157,7 +157,7 @@ int main()
 {
     const int W = 128, H = 128;
     Vec2 center(64.0, 64.0);
-    double angle = 30.0 * 3.14159265358979323846 / 180.0;
+    double angle = 60.0 * 3.14159265358979323846 / 180.0;
     Vec2 dir(cos(angle), -sin(angle));
     double lineLen = 52.5;
     Vec2 a = center - dir * (lineLen / 2.0);
