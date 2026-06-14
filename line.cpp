@@ -75,9 +75,7 @@ unsigned char blend(unsigned char bg, unsigned char fg, double alpha) {
 void drawLine(Canvas& canvas, Vec2 a, Vec2 b, double width, unsigned char color) {
     const int S = 2;
     double halfWidth = width / 2.0;
-    double halfLen = length(b - a) / 2.0;
-
-    Vec2 center = (a + b) * 0.5;
+    double subPixelSize = 1.0 / S;
 
     double minX = std::min(a.x, b.x) - halfWidth - 1;
     double maxX = std::max(a.x, b.x) + halfWidth + 1;
@@ -111,6 +109,8 @@ void drawLine(Canvas& canvas, Vec2 a, Vec2 b, double width, unsigned char color)
 
                     if (dist < halfWidth) {
                         totalAlpha++;
+                    } else if (dist < halfWidth + subPixelSize) {
+                        totalAlpha += (halfWidth + subPixelSize - dist) / subPixelSize;
                     }
                 }
             }
